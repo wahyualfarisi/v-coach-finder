@@ -8,7 +8,7 @@
         <section>
             <div class="controls">
                 <base-button mode="outline">Refresh</base-button>
-                <base-button link to="/register">Register as Coach</base-button>
+                <base-button link to="/register" v-if="!isCoach">Register as Coach</base-button>
             </div>
             <ul v-if="hasCoaches">
                 <coach-item 
@@ -44,38 +44,40 @@ export default {
        }
 
    },
+
    computed: {
+    filteredCoaches(){
+        const coaches = this.$store.getters['coaches/coaches']
+        return coaches.filter(coach => {
+            if(this.activeFilter.frontend && coach.areas.includes('frontend')) {
+                return true;
+            }
 
-       filteredCoaches(){
-           const coaches = this.$store.getters['coaches/coaches']
-           return coaches.filter(coach => {
-               if(this.activeFilter.frontend && coach.areas.includes('frontend')) {
-                   return true;
-               }
+            if(this.activeFilter.backend && coach.areas.includes('backend') ) {
+                return true;
+            }
 
-               if(this.activeFilter.backend && coach.areas.includes('backend') ) {
-                   return true;
-               }
+            if(this.activeFilter.career && coach.areas.includes('career')) {
+                return true;
+            }
 
-               if(this.activeFilter.career && coach.areas.includes('career')) {
-                   return true;
-               }
+            return false
+        });
+    },
 
-               return false
-           });
-       },
-
-       hasCoaches(){
-           return this.$store.getters['coaches/hasCoaches']
-       }
-
+    hasCoaches(){
+        return this.$store.getters['coaches/hasCoaches']
+    },
+       
+    isCoach(){
+        return this.$store.getters['coaches/isCoach'];
+    }
    },
-   methods: {
 
+   methods: {
        changeFilterHandler(updatedFilter){
            this.activeFilter = updatedFilter;
        }
-
    }
 }
 </script>

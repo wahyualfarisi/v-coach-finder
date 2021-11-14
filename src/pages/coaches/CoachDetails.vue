@@ -8,7 +8,7 @@
     <section>
         <base-card>
             <header>
-                <h2>Interested ? Reach out now!</h2>
+                <h2>Interested ? Reach out now!!</h2>
                 <base-button link :to="contactLink">Contact</base-button>
             </header>
             <router-view></router-view>
@@ -17,7 +17,7 @@
     <section>
         <base-card>
             <base-badge v-for="area in areas" :key="area" :type="area" :title="area"></base-badge>
-            <p>{{ descriptions }}</p>
+            <p>{{ description }}</p>
         </base-card>
     </section>
 </template>
@@ -31,6 +31,7 @@ export default {
     },
     created(){
         this.selectedCoach = this.$store.getters['coaches/coaches'].find(el => el.id === this.id);
+        console.log(this.selectedCoach)
     },
     computed: {
         fullName(){
@@ -43,10 +44,10 @@ export default {
             return this.selectedCoach.areas
         },
         rate(){
-            return this.selectedCoach.rate
+            return this.selectedCoach.hourlyRate
         },
-        descriptions(){
-            return this.selectedCoach.descriptions
+        description(){
+            return this.selectedCoach.description
         }
     }
 }

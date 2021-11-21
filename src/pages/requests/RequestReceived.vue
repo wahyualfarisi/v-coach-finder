@@ -5,8 +5,14 @@
                 <h2>Request Received</h2>
             </header>
             
+            <div v-if="isLoading">
+                <base-spinner></base-spinner>
+            </div>
+
+            <p v-else-if="!isLoading && error">{{ error }}</p>
+
             <ul 
-                v-if="hasRequests">
+                v-else-if="hasRequests">
                 <request-item 
                     v-for="(req, index) in receivedRequests"
                     :key="index"
@@ -24,6 +30,13 @@
 import RequestItem from './../../components/requests/RequestItem.vue';
 
 export default {
+    data(){
+        return {
+            isLoading: false,
+            error: null
+        }
+    },
+
     components: {
         RequestItem
     },
@@ -34,7 +47,23 @@ export default {
         },
 
         hasRequests(){
-            return this.$store.getters['requests/hasRequests'];
+            return !this.isLoading && this.$store.getters['requests/hasRequests'];
+        }
+    },
+
+    created(){
+        this.fetchRequests()
+    },
+
+    methods: {
+        async fetchRequests(){
+            this.isLoading = true;
+            try{
+                await this.$store.dispatch(`requests/fetchRequests`);
+            }catch(error){
+                this.error = error.message || `Something when wrong !.`;
+            }
+            this.isLoading = false;
         }
     }
 }

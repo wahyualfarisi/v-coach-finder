@@ -1,3 +1,6 @@
 <template>
-    <h1>Not Found</h1>
+    <base-card>
+        <h2>Page Not Found</h2>
+        <p>This page is not available</p>
+    </base-card>
 </template>

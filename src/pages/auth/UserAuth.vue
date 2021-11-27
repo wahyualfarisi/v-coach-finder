@@ -1,22 +1,38 @@
 <template>
-    <base-card>
-        <form @submit.prevent="submitForm">
-            <div class="form-control">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" v-model.trim="email">
-            </div>
-            
-            <div class="form-control">
-                <label for="password">Password</label>
-                <input type="password" id="password" v-model.trim="password">
-            </div>
-            
-            <p v-if="!formIsValid">Please enter valid email and password, password atleast 6 characters long.</p>
+    <div>
+        <base-dialog 
+            :show="!!error" 
+            @close="handleClose" 
+            title="An error occured">
+            {{ error }}
+        </base-dialog>
 
-            <base-button>{{ buttonTextAuth }}</base-button>
-            <base-button type="button" mode="flat" @click="switchAuthMode">{{ switchTextAuth }} instead</base-button>
-        </form>
-    </base-card>
+        <base-dialog 
+            :show="isLoading" 
+            title="Authenticating..." 
+            fixed>
+            <base-spinner />
+        </base-dialog>
+
+        <base-card>
+            <form @submit.prevent="submitForm">
+                <div class="form-control">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" v-model.trim="email">
+                </div>
+                
+                <div class="form-control">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" v-model.trim="password">
+                </div>
+                
+                <p v-if="!formIsValid">Please enter valid email and password, password atleast 6 characters long.</p>
+
+                <base-button>{{ buttonTextAuth }}</base-button>
+                <base-button type="button" mode="flat" @click="switchAuthMode">{{ switchTextAuth }} instead</base-button>
+            </form>
+        </base-card>
+    </div>
 </template>
 
 <script>
@@ -26,7 +42,9 @@ export default {
             email: '',
             password: '',
             formIsValid: true,
-            mode: 'login'
+            mode: 'login',
+            isLoading: false,
+            error: null
         }
     },
 
@@ -44,7 +62,8 @@ export default {
         switchAuthMode() {
             this.mode = this.mode === 'login' ? 'register' : 'login'
         },
-        submitForm() {
+
+        async submitForm() {
             this.formIsValid = true;
             if(
                 this.email === '' ||
@@ -54,8 +73,38 @@ export default {
                 this.formIsValid = false;
                 return;
             }
+            
+            this.isLoading = true;
 
+            const payload = {
+                email: this.email,
+                password: this.password
+            }
+
+            try{
+                if(this.mode === 'login'){
+                    await this.$store.dispatch('login', payload);
+                }else{
+                    await this.$store.dispatch('signUp', payload);
+                }
+
+                this.$router.replace('/coaches')
+            }catch(error){
+                this.error = error.message || 'Failed to authenticated, check your login data'
+            }
+
+            this.isLoading = false;
+
+
+        },
+
+        handleClose(){
+            this.error = null;
         }
+    },
+
+    created(){
+        console.log(process.env)
     }
 }
 </script>

@@ -14,6 +14,21 @@ export default {
         TheHeader
     },
 
+    computed: {
+        isAutoLogout(){
+            return this.$store.getters.isAutoLogout;
+        }
+    },
+
+    watch: {
+        isAutoLogout(currentValue, oldValue){
+            if(currentValue && currentValue !== oldValue ){
+                alert('hmm')
+                this.$router.replace('/coaches');
+            }
+        }
+    },
+
     created(){
         this.$store.dispatch('tryLogin')
     }

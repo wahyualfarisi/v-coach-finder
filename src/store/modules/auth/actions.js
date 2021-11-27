@@ -38,13 +38,12 @@ export default {
             throw error;
         }
 
-        // const expiresIn = +responseData.expiresIn * 1000;
-        const expiresIn = 5000;
+        const expiresIn = +responseData.expiresIn * 1000;
         const expirationDate = new Date().getTime() + expiresIn;
       
 
         timer = setTimeout(() => {
-            context.dispatch('logout');
+            context.dispatch('autoLogout');
         }, expiresIn)
  
 
@@ -71,7 +70,7 @@ export default {
         }
     
         timer = setTimeout( () => {
-            context.dispatch('logout')
+            context.dispatch('autoLogout')
         }, expiresIn)
 
         if(token && userId) {
@@ -94,5 +93,10 @@ export default {
         localStorage.removeItem('tokenExpiration');
 
         clearInterval(timer);
+    },
+
+    autoLogout(context){
+        context.dispatch('logout');
+        context.commit('setIsAutoLogout');
     }
 }

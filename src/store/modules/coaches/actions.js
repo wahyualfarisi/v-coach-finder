@@ -8,10 +8,10 @@ export default {
             hourlyRate: data.rate,
             areas: data.areas
         };
-
+        
         const token = context.rootGetters.token;
 
-        const response = await fetch(`https://react-github-repo-default-rtdb.firebaseio.com/coaches/${userId}.json?auth=${token}`, {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/coaches/${userId}.json?auth=${token}`, {
             method: 'PUT',
             body: JSON.stringify(coachData),
         });
@@ -30,7 +30,7 @@ export default {
             return;
         }
 
-        const response = await fetch(`https://react-github-repo-default-rtdb.firebaseio.com/coaches.json`);
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/coaches.json`);
 
         const responseData = await response.json();
 

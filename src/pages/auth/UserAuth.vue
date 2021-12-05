@@ -103,8 +103,8 @@ export default {
         }
     },
 
-    created(){
-        console.log(process.env)
+    mounted(){
+        document.title = 'Authentication'
     }
 }
 </script>

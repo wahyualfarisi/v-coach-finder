@@ -94,6 +94,10 @@ export default {
        this.loadCoaches();
    },
 
+   mounted(){
+       document.title = 'Coaches list'
+   },
+
    methods: {
        changeFilterHandler(updatedFilter){
            this.activeFilter = updatedFilter;

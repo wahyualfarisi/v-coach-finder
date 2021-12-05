@@ -13,11 +13,11 @@ Coach finder is a app that can use to find any teacher in web development, you c
 
 ## Try it
 
-See  [Demo](https://nodejs.org/).
+See  [Demo](https://vue-coach-finder-e4861.web.app/).
 
 ## Run in development mode
 
-Coach Finder requires [Node.js](https://vue-coach-finder-e4861.web.app/) v10+ to run.
+Coach Finder requires [Node.js](https://nodejs.org/) v10+ to run.
 
 Install the dependencies and devDependencies and start the server.
 ## 1. Register firebase config
